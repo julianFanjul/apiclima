@@ -1,4 +1,5 @@
 
+
 // If we need to use custom DOM library, let's save it to $$ variable:
 var $$ = Dom7;
 
@@ -6,7 +7,7 @@ var app = new Framework7({
   // App root element
   root: '#app',
   // App Name
-  name: 'My App',
+  name: 'Api clima',
   // App id
   id: 'com.myapp.test',
   // Enable swipe panel
@@ -46,7 +47,7 @@ var autocompleteDropdownAll = app.autocomplete.create({
     var results = [];
     // Find matched items
     for (var i = 0; i < LasCiudades.length; i++) {
-      if (LasCiudades[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(LasCiudades[i]);
+      if (LasCiudades[i].toLowerCase().indexOf(query.toLowerCase()) >= 0) results.push(LasCiudades[i].normalize('NFD').replace(/[\u0300-\u036f]/g, ""));
     }
     // Render items by passing array with result items
     render(results);
@@ -71,11 +72,12 @@ $$(document).on('page:init', '.page[data-name="index"]', function (e) {
   app.request.json(url, function (datosRecibidos) {
     for (let i = 0; i < datosRecibidos.length; i++) {
       LasCiudades = [];
+
       // Find matched items
       for (var t = 0; t < datosRecibidos.length; t++) {
         LasCiudades.push(datosRecibidos[t].name);
       }
-      return LasCiudades;
+      return (LasCiudades).normalize('NFD').replace(/[\u0300-\u036f]/g, "");;
     }
   })
 })
